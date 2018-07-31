@@ -1,6 +1,9 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
+using Abp.AutoMapper;
 using Abp.ZeroCore.SampleApp.Application.Shop;
+using Abp.ZeroCore.SampleApp.Core.Shop;
 using Shouldly;
 using Xunit;
 
@@ -70,6 +73,50 @@ namespace Abp.Zero.MultiLingual
             product1.Language.ShouldBe("tr");
             product1.Name.ShouldBe("Saat");
             product1.Id.ShouldBe(1);
+        }
+
+        [Fact]
+        public async Task CacheBase_Null_Logger_Sequence_Test_One()
+        {
+            var dto = new ProductCreateDto
+            {
+                Price = 99,
+                Stock = 1000,
+                Translations = new List<ProductTranslationDto>
+                {
+                    new ProductTranslationDto
+                    {
+                        Language = "en",
+                        Name = "Mobile Phone"
+                    }
+                }
+            };
+
+            var product = dto.MapTo<Product>();
+
+            var test = product.MapTo<ProductListDto>();
+        }
+
+        [Fact]
+        public async Task CacheBase_Null_Logger_Sequence_Test_Two()
+        {
+            var dto = new ProductCreateDto
+            {
+                Price = 99,
+                Stock = 1000,
+                Translations = new List<ProductTranslationDto>
+                {
+                    new ProductTranslationDto
+                    {
+                        Language = "en",
+                        Name = "Mobile Phone"
+                    }
+                }
+            };
+
+            var product = dto.MapTo<Product>();
+
+            var test = product.MapTo<ProductListDto>();
         }
     }
 }
