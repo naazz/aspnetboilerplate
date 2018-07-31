@@ -46,6 +46,8 @@ namespace Abp.ZeroCore.SampleApp
                     IocManager.Resolve<ISettingManager>()
                 ));
             });
+
+            Configuration.Modules.AbpAutoMapper().UseStaticMapper = true;
         }
 
         public override void PostInitialize()

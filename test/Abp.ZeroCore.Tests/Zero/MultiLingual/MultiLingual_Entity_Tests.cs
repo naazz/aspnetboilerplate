@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.ZeroCore.SampleApp.Application.Shop;
@@ -50,6 +51,51 @@ namespace Abp.Zero.MultiLingual
                 await uow.CompleteAsync();
             }
         }
+
+        [Fact]
+        public async Task CacheBase_Null_Logger_Sequence_Test_One()
+        {
+            var dto = new ProductCreateDto
+            {
+                Price = 99,
+                Stock = 1000,
+                Translations = new List<ProductTranslationDto>
+                {
+                    new ProductTranslationDto
+                    {
+                        Language = "en",
+                        Name = "Mobile Phone"
+                    }
+                }
+            };
+
+            var product = dto.MapTo<Product>();
+
+            var test = product.MapTo<ProductListDto>();
+        }
+
+        [Fact]
+        public async Task CacheBase_Null_Logger_Sequence_Test_Two()
+        {
+            var dto = new ProductCreateDto
+            {
+                Price = 99,
+                Stock = 1000,
+                Translations = new List<ProductTranslationDto>
+                {
+                    new ProductTranslationDto
+                    {
+                        Language = "en",
+                        Name = "Mobile Phone"
+                    }
+                }
+            };
+
+            var product = dto.MapTo<Product>();
+
+            var test = product.MapTo<ProductListDto>();
+        }
+
 
         [Fact]
         public async Task Create_MultiLingualEntity_With_Multiple_Translation_Test()
