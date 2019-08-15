@@ -4,8 +4,6 @@ The [Abp.AspNetCore.SignalR](http://www.nuget.org/packages/Abp.AspNetCore.Signal
 package makes it easier to use **ASP.NET Core SignalR** in ASP.NET Boilerplate-based
 applications.
 
-> NOTE: This package is currently in preview. If you have a problem, please write to the GitHub issues: https://github.com/aspnetboilerplate/aspnetboilerplate/issues/new
-
 ### Installation
 
 #### Server-Side
@@ -176,7 +174,7 @@ our hub.
 
     var chatHub = null;
     
-    abp.signalr.startConnection('signalr-myChatHub', function (connection) {
+    abp.signalr.startConnection(abp.appPath + 'signalr-myChatHub', function (connection) {
         chatHub = connection; // Save a reference to the hub
     
         connection.on('getMessage', function (message) { // Register for incoming messages

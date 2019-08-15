@@ -34,6 +34,7 @@ namespace Abp.ZeroCore.SampleApp
             Configuration.Features.Providers.Add<AppFeatureProvider>();
 
             Configuration.CustomConfigProviders.Add(new TestCustomConfigProvider());
+            Configuration.CustomConfigProviders.Add(new TestCustomConfigProvider2());
         }
 
         public override void Initialize()
@@ -64,6 +65,9 @@ namespace Abp.ZeroCore.SampleApp
             configuration.CreateMap<ProductUpdateDto, Product>();
 
             configuration.CreateMap<ProductTranslationDto, ProductTranslation>();
+
+            configuration.CreateMultiLingualMap<Order, OrderTranslation, OrderListDto>(context)
+                .EntityMap.ForMember(dest => dest.ProductCount, opt => opt.MapFrom(src => src.Products.Count));
         }
     }
 }

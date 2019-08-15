@@ -11,9 +11,9 @@ A sample multi lingual entity would be;
 
 	public class Product : Entity, IMultiLingualEntity<ProductTranslation>
 	{
-		public decimal Price { get; set; }
-
-		public ICollection<ProductTranslation> Translations { get; set; }
+	    public decimal Price { get; set; }
+	
+	    public ICollection<ProductTranslation> Translations { get; set; }
 	}
 
 
@@ -26,13 +26,13 @@ A sample multi lingual entity would be;
 
 	public class ProductTranslation : Entity, IEntityTranslation<Product>
 	{
-		public string Name { get; set; }
-
-		public Product Core { get; set; }
-
-		public int CoreId { get; set; }
-
-		public string Language { get; set; }
+	    public string Name { get; set; }
+	
+	    public Product Core { get; set; }
+	
+	    public int CoreId { get; set; }
+	
+	    public string Language { get; set; }
 	}
 
  #### CreateMultiLingualMap 
@@ -50,7 +50,7 @@ A sample Dto class for sample Product entity above would be;
 	{
 	    // Mapped from Product.Price
 	    public decimal Price { get; set; }
-
+	
 	    // Mapped from ProductTranslation.Name
 	    public string Name { get; set; }
 	}
@@ -61,17 +61,17 @@ And it's mapping configuration is;
 
 	Configuration.Modules.AbpAutoMapper().Configurators.Add(configuration =>
 	{
-		CustomDtoMapper.CreateMappings(configuration, new MultiLingualMapContext(
-			IocManager.Resolve<ISettingManager>()
-		));
+	    CustomDtoMapper.CreateMappings(configuration, new MultiLingualMapContext(
+	        IocManager.Resolve<ISettingManager>()
+	    ));
 	});
-
+	
 	internal static class CustomDtoMapper
 	{
-		public static void CreateMappings(IMapperConfigurationExpression configuration, MultiLingualMapContext context)
-		{
-			configuration.CreateMultiLingualMap<Product, ProductTranslation, ProductListDto>(context);
-		}
+	    public static void CreateMappings(IMapperConfigurationExpression configuration, MultiLingualMapContext context)
+	    {
+	        configuration.CreateMultiLingualMap<Product, ProductTranslation, ProductListDto>(context);
+	    }
 	}
 
 
@@ -83,9 +83,9 @@ In some cases like editing a multi lingual entity on the UI, all translations ma
 	[AutoMap(typeof(Product))]
 	public class ProductDto
 	{
-		public decimal Price { get; set; }
-
-	    	public List<ProductTranslationDto> Translations {get; set;}
+	    public decimal Price { get; set; }
+	
+	    public List<ProductTranslationDto> Translations {get; set;}
 	}
 
 
@@ -94,7 +94,18 @@ In some cases like editing a multi lingual entity on the UI, all translations ma
 	public class ProductTranslationDto
 	{
 	    public string Name { get; set; }
+
+	    public string Language { get; set; }
 	}
+
+
+
+CreateMultiLingualMap extension method returns an object of type CreateMultiLingualMapResult which contains **EntityMap** and  **TranslationMap** fields. These fields can be used to customize multi lingual mapping. A sample usage would be;
+
+```c#
+configuration.CreateMultiLingualMap<Order, OrderTranslation, OrderListDto>(context)
+    .EntityMap.ForMember(dest => dest.ProductCount, opt => opt.MapFrom(src => src.Products.Count));
+```
 
 ### Crud Operations
 
@@ -106,9 +117,9 @@ A Dto class like the below one can be used for creating a Multi-Lingual entity w
 	[AutoMap(typeof(Product))]
 	public class ProductDto
 	{
-		public decimal Price { get; set; }
-
-		public ICollection<ProductTranslationDto> Translations { get; set; }
+	    public decimal Price { get; set; }
+	
+	    public ICollection<ProductTranslationDto> Translations { get; set; }
 	}
 
 After defining such a Dto class, we can use it in our application service to create a Multi-Lingual entity.
@@ -116,18 +127,18 @@ After defining such a Dto class, we can use it in our application service to cre
 
 	public class ProductAppService : ApplicationService, IProductAppService
 	{
-		private readonly IRepository<Product> _productRepository;
-
-		public ProductAppService(IRepository<Product> productRepository)
-		{
-			_productRepository = productRepository;
-		}
-
-		public async Task CreateProduct(ProductDto input)
-		{
-			var product = ObjectMapper.Map<Product>(input);
-			await _productRepository.InsertAsync(product);
-		}
+	    private readonly IRepository<Product> _productRepository;
+	
+	    public ProductAppService(IRepository<Product> productRepository)
+	    {
+	        _productRepository = productRepository;
+	    }
+	
+	    public async Task CreateProduct(ProductDto input)
+	    {
+	        var product = ObjectMapper.Map<Product>(input);
+	        await _productRepository.InsertAsync(product);
+	    }
 	}
 
 #### Updating a Multi-Lingual Entity with Translation(s)
@@ -137,12 +148,12 @@ We can use similar Dto class for updating our Multi-Lingual entity. A sample app
 
 	public async Task UpdateProduct(ProductDto input)
 	{
-		var product = await _productRepository.GetAllIncluding(p => p.Translations)
-			.FirstOrDefaultAsync(p => p.Id == input.Id);
-
-		product.Translations.Clear();
-
-		ObjectMapper.Map(input, product);
+	    var product = await _productRepository.GetAllIncluding(p => p.Translations)
+	        .FirstOrDefaultAsync(p => p.Id == input.Id);
+	
+	    product.Translations.Clear();
+	
+	    ObjectMapper.Map(input, product);
 	}
 
 ##### Note for EntityFramework 6.x
@@ -152,7 +163,7 @@ For EntityFramework 6.x, all the translations must be deleted from database manu
 
 	foreach (var translation in product.Translations.ToList())
 	{
-		await _productTranslationRepository.DeleteAsync(translation);
-		product.Translations.Remove(translation);
+	    await _productTranslationRepository.DeleteAsync(translation);
+	    product.Translations.Remove(translation);
 	}
 

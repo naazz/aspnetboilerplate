@@ -34,7 +34,7 @@
 
     /* MESSAGE **************************************************/
 
-    var showMessage = function (type, message, title, isHtml) {
+    var showMessage = function (type, message, title, isHtml, options) {
 
         if (!title) {
             title = message;
@@ -46,7 +46,7 @@
         };
 
         if (isHtml) {
-            const el = document.createElement('div');
+            var el = document.createElement('div');
             el.innerHTML = message;
 
             messageContent.content = el;
@@ -58,7 +58,8 @@
             {},
             abp.libs.sweetAlert.config['default'],
             abp.libs.sweetAlert.config[type],
-            messageContent
+            messageContent,
+            options
         );
 
         return $.Deferred(function ($dfd) {
@@ -68,27 +69,27 @@
         });
     };
 
-    abp.message.info = function (message, title, isHtml) {
-        return showMessage('info', message, title, isHtml);
+    abp.message.info = function (message, title, isHtml, options) {
+        return showMessage('info', message, title, isHtml, options);
     };
 
-    abp.message.success = function (message, title, isHtml) {
-        return showMessage('success', message, title, isHtml);
+    abp.message.success = function (message, title, isHtml, options) {
+        return showMessage('success', message, title, isHtml, options);
     };
 
-    abp.message.warn = function (message, title, isHtml) {
-        return showMessage('warn', message, title, isHtml);
+    abp.message.warn = function (message, title, isHtml, options) {
+        return showMessage('warn', message, title, isHtml, options);
     };
 
-    abp.message.error = function (message, title, isHtml) {
-        return showMessage('error', message, title, isHtml);
+    abp.message.error = function (message, title, isHtml, options) {
+        return showMessage('error', message, title, isHtml, options);
     };
 
-    abp.message.confirm = function (message, titleOrCallback, callback, isHtml) {
+    abp.message.confirm = function (message, titleOrCallback, callback, isHtml, options) {
         var messageContent;
 
         if (isHtml) {
-            const el = document.createElement('div');
+            var el = document.createElement('div');
             el.innerHTML = message;
 
             messageContent = {
@@ -110,7 +111,8 @@
             {},
             abp.libs.sweetAlert.config['default'],
             abp.libs.sweetAlert.config.confirm,
-            messageContent
+            messageContent,
+            options
         );
 
         return $.Deferred(function ($dfd) {

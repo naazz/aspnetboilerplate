@@ -166,7 +166,7 @@ namespace Abp.Authorization
             {
                 await UserManager.InitializeOptionsAsync(tenantId);
 
-                //TryLoginFromExternalAuthenticationSources method may create the user, that's why we are calling it before AbpStore.FindByNameOrEmailAsync
+                //TryLoginFromExternalAuthenticationSources method may create the user, that's why we are calling it before AbpUserStore.FindByNameOrEmailAsync
                 var loggedInFromExternalSource = await TryLoginFromExternalAuthenticationSources(userNameOrEmailAddress, plainPassword, tenant);
 
                 var user = await UserManager.FindByNameOrEmailAsync(tenantId, userNameOrEmailAddress);
@@ -218,12 +218,6 @@ namespace Abp.Authorization
             {
                 return new AbpLoginResult<TTenant, TUser>(AbpLoginResultType.UserPhoneNumberIsNotConfirmed);
             }
-
-            user.LastLoginTime = Clock.Now;
-
-            await UserManager.UpdateAsync(user);
-
-            await UnitOfWorkManager.Current.SaveChangesAsync();
 
             var principal = await _claimsPrincipalFactory.CreateAsync(user);
 

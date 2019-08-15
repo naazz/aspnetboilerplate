@@ -15,11 +15,11 @@ namespace Abp.AutoMapper.Tests
         {
             var config = new MapperConfiguration(configuration =>
             {
-                configuration.AddCollectionMappers();
                 configuration.CreateAutoAttributeMaps(typeof(MyClass1));
                 configuration.CreateAutoAttributeMaps(typeof(MyClass2));
                 configuration.CreateAutoAttributeMaps(typeof(MyAutoMapKeyClass1));
                 configuration.CreateAutoAttributeMaps(typeof(MyAutoMapKeyClass2));
+                configuration.AddCollectionMappers();
             });
 
             _mapper = config.CreateMapper();
@@ -56,7 +56,7 @@ namespace Abp.AutoMapper.Tests
         }
 
         [Fact]
-        public void Should_Map_Two_Way_When_AutoMAp_Attribute_Is_Used()
+        public void Should_Map_Two_Way_When_AutoMap_Attribute_Is_Used()
         {
             MyClass3 obj2 = new MyClass3
             {
